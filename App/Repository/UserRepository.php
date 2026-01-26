@@ -85,6 +85,7 @@ class UserRepository extends AbstractRepository
             $req->bindParam(1, $email, \PDO::PARAM_STR);
             //5 exécuter la requête
             $req->execute();
+            $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, User::class);
             //6 récupérer la réponse (SELECT)
             $user = $req->fetch(\PDO::FETCH_ASSOC);
             //Hydratation en objet User
