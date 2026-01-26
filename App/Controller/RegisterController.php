@@ -69,6 +69,28 @@ class RegisterController extends AbstractController
     //Méthode pour se connecter
     public function login(): mixed
     {
+        $data = [];
+        if ($this->isFormSubmitted($_POST,  "submit")) {
+            if (!empty($_POST["email"]) && !empty($_POST["password"])) {
+                Tools::sanitize_array($_POST);
+                $email = $_POST["email"];
+                $pwd = $_POST['password'];
+                $user = $this->userRepository->findByEmail($email);
+                if(isset($user)){
+                    if(password_verify($pwd, $user->getPassword())){
+                        session_start();
+                        $_SESSION['id'] = $user->getId();
+                        $_SESSION['pseudo'] = $user->getPseudo();
+                        $_SESSION['email'] = $user->getEmail();
+                        $_SESSION['roles'] = $user->getRoles();
+                        header('Location: /');
+                        exit;
+                    }
+                } else {
+                    $data["msg"] = "L'identifiant ou le mot de passe est incorrect.";
+                }
+            }
+        }
         return $this->render("login", "Se connecter");
     }
 
