@@ -4,15 +4,18 @@ namespace App\Controller;
 
 use App\Controller\AbstractController;
 use App\Service\SecurityService;
+use App\Service\MediaService;
 
 class RegisterController extends AbstractController
 {
     private SecurityService $securityService;
+    private MediaService $mediaService;
 
     //Injection du UserRepository
     public function __construct()
     {
         $this->securityService = new SecurityService();
+        $this->mediaService = new MediaService(); 
     }
 
     //Méthode pour s'inscrire
@@ -49,5 +52,28 @@ class RegisterController extends AbstractController
         session_destroy();
         header('Location: /');
         exit;
+    }
+
+    public function showProfil(){
+        $data = [];
+        $user = $this->securityService->getProfil();
+        if(isset($user)){
+            $img = $user->getMedia();
+            $img = $this->mediaService->getMedia($img->getId())->getUrl();
+
+            $data['pseudo'] = $user->getPseudo();
+            $data['lastname'] = $user->getLastname();
+            $data['firstname'] = $user->getFirstname();
+            $data['email'] = $user->getEmail();
+            $data['roles'] = $user->getRoles();
+
+            $data['img'] = $img;
+            
+            return $this->render('profil', "Profil", $data);
+        } else { 
+            return $this->render("login", "Se connecter", $data);
+        }
+
+       
     }
 }

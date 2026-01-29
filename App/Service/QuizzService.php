@@ -45,21 +45,6 @@ class QuizzService
         //Création de l'objet Quizz
         $quizz = $this->createQuizz($post);
 
-         //test si le media existe
-        if (isset($_FILES["img"]) && !empty($_FILES["img"]["tmp_name"])) {
-            try {
-                //Import du fichier
-                $media = $this->mediaService->addMedia($_FILES["img"]);
-            } catch(\Exception $e) {
-                echo $e->getMessage();
-            }
-        } 
-        //Image par default
-        else {
-            $media = $this->mediaService->getDefautQuizzImg();
-        }
-        
-        $quizz->setMedia($media);
 
         //Validation de l'entity Quizz
         try {
@@ -112,6 +97,21 @@ class QuizzService
         $author->setId($_SESSION["user"]["id"]);
         //Setter l'author (User connecté)
         $quizz->setAuthor($author);
+        //test si le media existe
+        if (isset($_FILES["img"]) && !empty($_FILES["img"]["tmp_name"])) {
+            try {
+                //Import du fichier
+                $media = $this->mediaService->addMedia($_FILES["img"]);
+            } catch(\Exception $e) {
+                echo $e->getMessage();
+            }
+        } 
+        //Image par default
+        else {
+            $media = $this->mediaService->getDefaultImg();
+        }
+        
+        $quizz->setMedia($media);
 
         return $quizz;
     }

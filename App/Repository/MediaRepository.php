@@ -12,7 +12,7 @@ class MediaRepository extends AbstractRepository
     public function find(int $id): ?Media 
     {
         try {
-            $sql = "SELECT m.id, m.url, m.alt, m.created_at FROM media AS m WHERE m.id = ? OR m.alt = ?";
+            $sql = "SELECT m.id, m.url, m.alt, m.created_at FROM media AS m WHERE m.id = ?";
             $req = $this->connect->prepare($sql);
             $req->bindParam(1, $id, \PDO::PARAM_INT);
             $req->execute();
@@ -28,23 +28,37 @@ class MediaRepository extends AbstractRepository
         return $newMedia;
     }
 
-    public function findByURL(string $url){
+    // public function findByURL(string $url) : ?Media{
+    //     try {
+    //         $sql = "SELECT m.id, m.url, m.alt, m.created_at FROM media AS m WHERE m.url = ?";
+    //         $req = $this->connect->prepare($sql);
+    //         $req->bindParam(1, $url, \PDO::PARAM_STR);
+    //         $req->execute();
+    //         $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Media::class);
+    //         $media = $req->fetch();
+    //     } catch(\PDOException $e) {
+    //         echo $e->getMessage();
+    //     }
+    //     return $media;
+    // }
+
+    public function findAll(): array 
+    {
+        return [];
+    }
+
+    public function findbyId(int $id): ?Media {
         try {
-            $sql = "SELECT m.id, m.url, m.alt, m.created_at FROM media AS m WHERE m.url = ?";
+            $sql = "SELECT m.id, m.url, m.alt, m.created_at FROM media AS m WHERE m.id = ?";
             $req = $this->connect->prepare($sql);
-            $req->bindParam(1, $url, \PDO::PARAM_STR);
+            $req->bindParam(1, $id, \PDO::PARAM_INT);
             $req->execute();
-            $req->setFetchMode(\PDO::FETCH_CLASS| \PDO::FETCH_PROPS_LATE, Media::class);
+            $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Media::class);
             $media = $req->fetch();
         } catch(\PDOException $e) {
             echo $e->getMessage();
         }
         return $media;
-    }
-
-    public function findAll(): array 
-    {
-        return [];
     }
 
     public function save(Entity $entity): Media

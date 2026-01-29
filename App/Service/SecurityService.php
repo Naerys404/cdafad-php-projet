@@ -133,4 +133,16 @@ class SecurityService
         ];
         return "Connecté";
     }
+
+
+    public function getProfil(): ? User{
+        if($_SESSION['user']){
+            $data = $_SESSION['user'];
+            
+            $user = $this->userRepository->findByEmail($data['email']);
+            return $user;
+        }
+
+        return null;
+    }
 }
