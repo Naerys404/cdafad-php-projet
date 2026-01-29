@@ -17,6 +17,7 @@
             <input type="text" name="title" placeholder="Saisir le titre">
             <textarea name="description" placeholder="Saisir la description"></textarea>
             <?php include 'components/component_all_categories.php';?>
+            <input type="file" name="img">
             <input type="submit" value="Ajouter" name="submit">
             <p><?= $data["msg"] ?? "" ?></p>
         </form>

@@ -15,9 +15,11 @@ class QuizzService
 {
     //Attributs
     private QuizzRepository $quizzRepository;
+    private MediaService $mediaService;
 
     public function __construct() {
         $this->quizzRepository = new QuizzRepository();
+        $this->mediaService = new MediaService();
     }
 
     /**
@@ -42,6 +44,22 @@ class QuizzService
         
         //Création de l'objet Quizz
         $quizz = $this->createQuizz($post);
+
+         //test si le media existe
+        if (isset($_FILES["img"]) && !empty($_FILES["img"]["tmp_name"])) {
+            try {
+                //Import du fichier
+                $media = $this->mediaService->addMedia($_FILES["img"]);
+            } catch(\Exception $e) {
+                echo $e->getMessage();
+            }
+        } 
+        //Image par default
+        else {
+            $media = $this->mediaService->getDefautQuizzImg();
+        }
+        
+        $quizz->setMedia($media);
 
         //Validation de l'entity Quizz
         try {

@@ -40,4 +40,8 @@ class MediaService
     {
         return $this->mediaRepository->find(1);
     }
+
+    public function getDefautQuizzImg(): ?Media{
+        return $this->mediaRepository->findByURL('default.png');
+    }
 }
